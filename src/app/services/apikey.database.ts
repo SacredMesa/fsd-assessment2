@@ -26,7 +26,6 @@ export class ApiKeyDatabase extends Dexie {
     console.log('data entering apidb: ', key)
 
     const resultCount = await this.api
-      .where('api').equals(key.api)
       .count()
 
     if (resultCount <= 0) {
