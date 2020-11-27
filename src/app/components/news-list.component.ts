@@ -6,7 +6,9 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { News } from "../interfaces/models";
 
 //Services & DBs
+import { NavigationService } from "../services/navigation.service";
 import { ApiKeyDatabase } from "../services/apikey.database";
+import { NewsarticlesDatabase } from "../services/newsarticles.database";
 
 @Component({
   selector: 'app-news-list',
@@ -20,13 +22,23 @@ export class NewsListComponent implements OnInit {
 
   newsResults: News[] = []
 
-  constructor(private activatedRoute: ActivatedRoute, private http: HttpClient, private apidb: ApiKeyDatabase) { }
+  timestamp: number = new Date().getTime()
+  timeCheck: number = new Date().getTime() + 300000;
+
+  noResults: boolean = true;
+
+  constructor(private activatedRoute: ActivatedRoute, private http: HttpClient, private apidb: ApiKeyDatabase, private nav: NavigationService, private newsdb: NewsarticlesDatabase) { }
 
   async ngOnInit() {
 
     await this.apidb.api.get(1)
       .then(key => { this.apiKey = key.api })
     console.log('searching with this key: ', this.apiKey)
+
+    // await this.newsdb.news.where('country').equals(this.countryCode).each(key => {
+    //   this.newsResults.push(key)
+    // })
+    console.log("Has we gotten news before??? ", this.newsResults)
 
     this.countryCode = this.activatedRoute.snapshot.params['countrycode'];
 
@@ -36,25 +48,48 @@ export class NewsListComponent implements OnInit {
       .set('apiKey', this.apiKey)
       .set('pageSize', '30')
 
-    this.http
-      .get<any>(url, { params: params })
-      .toPromise()
-      .then(res => {
-        const results = res['articles'] as any[]
-        this.newsResults = results.map(r => {
-          return {
-            source: r['source'].name,
-            author: r['author'],
-            title: r['title'],
-            description: r['description'],
-            url: r['url'],
-            image: r['urlToImage'],
-            published: r['publishedAt'],
-            content: r['content'],
-          } as News
+    console.log('help me I wanna die', this.count())
+
+// @ts-ignore
+    if (this.count() == 0 || this.newsdb.news.where('timestamp').above(this.timeCheck)) {
+      this.http
+        .get<any>(url, { params: params })
+        .toPromise()
+        .then(res => {
+          const results = res['articles'] as any[]
+          this.newsResults = results.map(r => {
+            let obj = {
+              // id: this.countryCode,
+              source: r['source'].name,
+              author: r['author'],
+              title: r['title'],
+              description: r['description'],
+              url: r['url'],
+              image: r['urlToImage'],
+              published: r['publishedAt'],
+              content: r['content'],
+              country: this.countryCode,
+              timestamp: this.timestamp
+            } as News
+            this.newsdb.saveNews(obj)
+            return obj
+          })
+          console.log(this.newsResults)
         })
-        console.log(this.newsResults)
-      })
+    }
+
+    if (this.newsResults.length == 0) {
+      this.noResults = false
+    }
+  }
+
+  async count() {
+    return await this.newsdb.news.count()
+    .then(c => {return c})
+  }
+
+  goToCountries() {
+    this.nav.goToCountry()
   }
 
 }

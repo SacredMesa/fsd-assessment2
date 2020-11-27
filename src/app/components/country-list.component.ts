@@ -20,7 +20,9 @@ export class CountryListComponent implements OnInit {
 
   async ngOnInit() {
 
-    await this.countrydb.country.each(key => { this.countryData.push(key) })
+    await this.countrydb.country.each(key => {
+      this.countryData.push(key)
+    })
     console.log("Has it been stored beforee??? ", this.countryData)
 
     const url = `https://restcountries.eu/rest/v2/all`
