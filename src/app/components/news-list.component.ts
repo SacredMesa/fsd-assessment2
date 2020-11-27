@@ -25,6 +25,8 @@ export class NewsListComponent implements OnInit {
   timestamp: number = new Date().getTime()
   timeCheck: number = new Date().getTime() + 300000;
 
+  // timeValid:boolean = this.newsdb.news < this.timeCheck ? true : false
+
   noResults: boolean = true;
 
   constructor(private activatedRoute: ActivatedRoute, private http: HttpClient, private apidb: ApiKeyDatabase, private nav: NavigationService, private newsdb: NewsarticlesDatabase) { }
@@ -35,9 +37,14 @@ export class NewsListComponent implements OnInit {
       .then(key => { this.apiKey = key.api })
     console.log('searching with this key: ', this.apiKey)
 
-    // await this.newsdb.news.where('country').equals(this.countryCode).each(key => {
-    //   this.newsResults.push(key)
-    // })
+    await this.newsdb.news
+    .where('country')
+    .equals(this.countryCode)
+    // .and('timestamp')
+    // less than timeCheck????
+    .each(key => {
+      this.newsResults.push(key)
+    })
     console.log("Has we gotten news before??? ", this.newsResults)
 
     this.countryCode = this.activatedRoute.snapshot.params['countrycode'];
@@ -47,8 +54,6 @@ export class NewsListComponent implements OnInit {
       .set('country', this.countryCode)
       .set('apiKey', this.apiKey)
       .set('pageSize', '30')
-
-    console.log('help me I wanna die', this.count())
 
 // @ts-ignore
     if (this.count() == 0 || this.newsdb.news.where('timestamp').above(this.timeCheck)) {
@@ -81,11 +86,6 @@ export class NewsListComponent implements OnInit {
     if (this.newsResults.length == 0) {
       this.noResults = false
     }
-  }
-
-  async count() {
-    return await this.newsdb.news.count()
-    .then(c => {return c})
   }
 
   goToCountries() {
