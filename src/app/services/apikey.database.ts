@@ -44,4 +44,8 @@ export class ApiKeyDatabase extends Dexie {
       return this.nav.goToSettings()
     }
   }
+
+  deleteApi(i: number) {
+    this.api.delete(i)
+  }
 }

@@ -17,15 +17,15 @@ export class SettingsComponent implements OnInit {
 
   apiKey: string = ''
 
-  constructor(private fb: FormBuilder, private nav: NavigationService , private apidb: ApiKeyDatabase) { }
+  constructor(private fb: FormBuilder, private nav: NavigationService, private apidb: ApiKeyDatabase) { }
 
   ngOnInit(): void {
 
     this.apiForm = this.createApi()
 
-// unhandled rejection here. Works, but ugly
+    // unhandled rejection here. Works, but ugly
     this.apidb.api.get(1)
-      .then(key => {this.apiKey = key.api})
+      .then(key => { this.apiKey = key.api })
     console.log(this.apiKey)
   }
 
@@ -42,5 +42,9 @@ export class SettingsComponent implements OnInit {
     await this.apidb.saveApi(add)
 
     this.nav.goToCountry()
+  }
+
+  delete(i: number) {
+    this.apidb.deleteApi(i)
   }
 }
