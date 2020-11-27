@@ -56,7 +56,7 @@ export class NewsListComponent implements OnInit {
       .set('pageSize', '30')
 
 // @ts-ignore
-    if (this.count() == 0 || this.newsdb.news.where('timestamp').above(this.timeCheck)) {
+    if (this.newsResults.length == 0 || this.newsdb.news.where('timestamp').above(this.timeCheck)) {
       this.http
         .get<any>(url, { params: params })
         .toPromise()

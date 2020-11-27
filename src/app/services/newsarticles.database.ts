@@ -13,7 +13,7 @@ export class NewsarticlesDatabase extends Dexie {
     super('newsDB')
 
     this.version(1).stores({
-      news: "++id, timestamp, source, author, title, description, url, image, published, content"
+      news: "++id, timestamp, country, source, author, title, description, url, image, published, content"
     })
 
     this.news = this.table('news')
