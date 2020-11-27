@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 
+//Services & DBs
+import { CountrylistDatabase } from "../services/countrylist.database";
+
 // interfaces
 import { Country } from "../interfaces/models";
 
@@ -13,26 +16,35 @@ export class CountryListComponent implements OnInit {
 
   countryData: Country[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private countrydb: CountrylistDatabase) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+
+    await this.countrydb.country.each(key => { this.countryData.push(key) })
+    console.log("Has it been stored beforee??? ", this.countryData)
 
     const url = `https://restcountries.eu/rest/v2/all`
 
-    this.http
-      .get<any>(url)
-      .toPromise()
-      .then(res => {
-        const results = res as any[]
-        this.countryData = results.map(r => {
-          return {
-            name: r['name'],
-            alpha2code: r['alpha2Code'],
-            flag: r['flag']
-          } as Country
+    if (this.countryData.length == 0) {
+      this.http
+        .get<any>(url)
+        .toPromise()
+        .then(res => {
+          const results = res as any[]
+          this.countryData = results.map(r => {
+            let obj = {
+              name: r['name'],
+              alpha2code: r['alpha2Code'],
+              flag: r['flag']
+            } as Country
+            this.countrydb.saveCountries(obj)
+            return obj
+          })
+          console.log('pulled from API!! ', this.countryData)
         })
-        console.log(this.countryData)
-      })
+    } else {
+      console.log('We have stuff in our countryData variable?')
+    }
 
   }
 

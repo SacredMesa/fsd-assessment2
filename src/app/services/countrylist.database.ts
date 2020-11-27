@@ -7,16 +7,21 @@ import { Country } from '../interfaces/models';
 })
 export class CountrylistDatabase extends Dexie {
 
-  private country: Dexie.Table<Country, string>;
+  country: Dexie.Table<Country, string>;
 
   constructor() {
     super('countryDB')
 
     this.version(1).stores({
-      country: "country"
+      country: "name, alpha2code, flag"
     })
 
     this.country = this.table('country')
+  }
+
+  async saveCountries(key: Country): Promise<any> {
+    console.log('data entering countrydb: ', key)
+    return await this.country.add(key)
   }
 
 }

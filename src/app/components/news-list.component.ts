@@ -34,6 +34,7 @@ export class NewsListComponent implements OnInit {
     let params = (new HttpParams())
       .set('country', this.countryCode)
       .set('apiKey', this.apiKey)
+      .set('pageSize', '30')
 
     this.http
       .get<any>(url, { params: params })

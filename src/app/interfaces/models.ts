@@ -4,6 +4,7 @@ export interface Api {
 }
 
 export interface Country {
+  id?: number
   name: string
   alpha2code: string
   flag: string

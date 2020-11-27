@@ -1,3 +1,23 @@
-<p>news-list works!</p>
+<div class="article-container d-flex flex-wrap justify-content-center" *ngFor="let sr of newsResults; let i = index">
 
+  <div class="card text-white bg-dark m-3" style="width: 90vw;">
+    <img class="card-img-top" src="{{sr.image}}" alt="Card image cap">
 
+    <div class="card-body text-white bg-dark">
+      <h5 class="card-title">{{sr.title}}</h5>
+      <p class="card-text">{{sr.description}}</p>
+      <p class="card-text">{{sr.content}}</p>
+    </div>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-dark">{{sr.source}}</li>
+      <li class="list-group-item list-group-item-dark">By {{sr.author}}</li>
+      <li class="list-group-item list-group-item-dark">Published on {{sr.published}}</li>
+    </ul>
+
+    <div class="card-body">
+      <a href="{{sr.url}}" class="card-link">Read More</a>
+    </div>
+  </div>
+
+</div>
