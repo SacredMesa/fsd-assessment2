@@ -1,0 +1,20 @@
+<h1>Settings</h1>
+
+<form [formGroup]="apiForm">
+  <div class="form-group">
+    <label for="api-entry">NewsAPI.org</label>
+    <input type="text" [value]="apiKey" class="form-control" id="api-entry" formControlName="api">
+  </div>
+</form>
+
+<div class="button-container d-flex">
+  <button type="button" class="btn btn-secondary">
+    Back
+  </button>
+  <button type="button" class="btn btn-danger" [disabled]="apiForm.invalid">
+    Delete
+  </button>
+  <button type="button" class="btn btn-success ml-auto" [disabled]="apiForm.invalid" (click)="addApiKey()">
+    Add
+  </button>
+</div>

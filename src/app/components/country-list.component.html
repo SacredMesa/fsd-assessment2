@@ -1,0 +1,18 @@
+<ul class="list-group">
+  <div *ngFor="let items of countryData; let i = index;">
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">
+          <a [routerLink]="['/news', items.alpha2code]" class="">
+            {{items.name}}
+          </a>
+        </div>
+        <div class="col" style="max-width: 10vw;">
+          <img src="{{items.flag}}" alt="Flag" class="img-fluid rounded float-right">
+        </div>
+      </div>
+    </li>
+
+  </div>
+</ul>
