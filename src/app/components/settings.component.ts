@@ -23,6 +23,7 @@ export class SettingsComponent implements OnInit {
 
     this.apiForm = this.createApi()
 
+// unhandled rejection here. Works, but ugly
     this.apidb.api.get(1)
       .then(key => {this.apiKey = key.api})
     console.log(this.apiKey)
