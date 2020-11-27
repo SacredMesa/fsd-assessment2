@@ -11,7 +11,7 @@
   <button type="button" class="btn btn-secondary">
     Back
   </button>
-  <button type="button" class="btn btn-danger" [disabled]="apiForm.invalid">
+  <button type="button" class="btn btn-danger" [disabled]="apiForm.invalid" (click)="delete(1)">
     Delete
   </button>
   <button type="button" class="btn btn-success ml-auto" [disabled]="apiForm.invalid" (click)="addApiKey()">

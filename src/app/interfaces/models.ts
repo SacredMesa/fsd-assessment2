@@ -11,6 +11,9 @@ export interface Country {
 }
 
 export interface News {
+  id?: string
+  country: string
+  timestamp: number
   source: string
   author: string
   title: string
